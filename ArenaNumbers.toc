@@ -1,5 +1,6 @@
 ## Interface: 30300
 ## Title: Arena Numbers
+## Author: Idan
 ## Notes: Shows arena1-3 respectively on arena nameplates 
 
 ArenaNumbers.lua
