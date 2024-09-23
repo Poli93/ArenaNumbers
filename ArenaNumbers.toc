@@ -2,5 +2,6 @@
 ## Title: Arena Numbers
 ## Author: Idan
 ## Notes: Shows arena1-3 respectively on arena nameplates 
+## SavedVariables: ANOptions
 
 ArenaNumbers.lua
