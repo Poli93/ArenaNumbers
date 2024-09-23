@@ -20,7 +20,7 @@ local function AddElements(plate, time)
 
     if time >= interval then
         time = 0
-
+	
         local _, type = IsInInstance()
         if ArenaNumbers and type == "arena" then
             for i = 1, GetNumArenaOpponents() do
@@ -32,8 +32,11 @@ local function AddElements(plate, time)
                 if nr then
                     name:SetText(nr)
                     name:ClearAllPoints()
-                    name:SetPoint("BOTTOM", plate, "TOP", 0, -15)
+                    name:SetPoint("BOTTOM", plate, "TOP", ANOptions["fontXpos"], ANOptions["fontYpos"])
                     name:SetJustifyH("CENTER")
+					
+                    local font, fontHeight, flags = name:GetFont()  
+                    name:SetFont(font, ANOptions["fontSize"], flags)
                 end
             end
         end
@@ -51,6 +54,32 @@ local function onUpdate(self, elapsed)
         if region and region:GetObjectType() == "Texture" and region:GetTexture() == "Interface\\Tooltips\\Nameplate-Border" then
             AddElements(plate, time)
         end
+    end
+end
+
+SLASH_ANCMDS1 = "/an"
+SLASH_ANCMDS2 = "/anc"
+SlashCmdList["ANCMDS"] = function(msg)
+    local cmd, value = msg:match("^(%S*)%s*(.-)$")  
+    value = tonumber(value)
+    
+    if (cmd == "scale" or cmd == "size") and value then
+        ANOptions["fontSize"] = value
+		print(AN_TEXT .. " Font size set to: " .. value)
+    elseif (cmd == "xpos" or cmd == "x") and value then
+        ANOptions["fontXpos"] = value
+		print(AN_TEXT .. " X Position set to: " .. value)
+    elseif (cmd == "ypos" or cmd == "y") and value then
+        ANOptions["fontYpos"] = value
+        print(AN_TEXT .. " Y Position set to: " .. value)
+    elseif cmd == "reset" then
+        ANDefaults() 
+		print(AN_TEXT .. " Settings reset to default.")
+    else
+        print("Usage: /an scale / size <number> - set font size")
+        print("Usage: /an x / xpos <number> - set x position")
+        print("Usage: /an y / ypos <number> - set y position")
+        print("Usage: /an reset - reset settings to default")
     end
 end
 
