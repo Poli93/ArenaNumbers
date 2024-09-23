@@ -1,11 +1,18 @@
-local _, ArenaNumbers = ...
+local addon, ArenaNumbers = ...
 local floor, select, tonumber = math.floor, select, tonumber
 local UnitName, STANDARD_TEXT_FONT = UnitName, STANDARD_TEXT_FONT
 local IsInInstance, GetNumArenaOpponents = IsInInstance, GetNumArenaOpponents
 local interval = 0.1
 local time = 0
-local enabled = true
 local ArenaNumbers = true
+local AN_TEXT = "|cff69CCF0ArenaNumbers|r: "
+
+local function ANDefaults()
+	ANOptions["fontSize"] = 15.665118083221
+    ANOptions["fontXpos"] = 0
+    ANOptions["fontYpos"] = -15
+    print(AN_TEXT .. " Settings reset to default.")
+end
 
 
 local function AddElements(plate, time)
@@ -47,9 +54,25 @@ local function onUpdate(self, elapsed)
     end
 end
 
+local function OnAddonLoaded(...)
+	if ... == addon then
+	print(AN_TEXT .. " addon loaded.")
+		if ANOptions == nil or ANOptions["fontSize"] == nil or ANOptions["fontXpos"] == nil or ANOptions["fontYpos"] == nil then
+		    ANOptions = {} 
+            ANDefaults()
+			print(AN_TEXT .. " Settings reset to default.")
+		end
+	end
+end
+
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_LOGIN")
-frame:SetScript("OnEvent", function()
+frame:RegisterEvent("ADDON_LOADED")
+frame:SetScript("OnEvent", function(self, event, ...)
+    if event == "ADDON_LOADED" then
+        OnAddonLoaded(...)
+	end
+
     if not (GetCVarBool("nameplateShowEnemies") or GetCVarBool("nameplateShowFriends")) then
         return
     end
